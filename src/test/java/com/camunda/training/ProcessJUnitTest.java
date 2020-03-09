@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.assertj.core.api.Assertions;
+import org.camunda.bpm.engine.runtime.Job;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.test.Deployment;
 import org.camunda.bpm.engine.test.ProcessEngineRule;
@@ -39,6 +40,14 @@ public class ProcessJUnitTest {
     // Start process with Java API and variables
     ProcessInstance processInstance = runtimeService().startProcessInstanceByKey("TwitterQAProcess", variables);
     // Make assertions on the process instance
+
+    List<Job> jobList = jobQuery()
+            .processInstanceId(processInstance.getId())
+            .list();
+    Assertions.assertThat(jobList).hasSize(1);
+    Job job = jobList.get(0);
+    execute(job);
+
     assertThat(processInstance).isWaitingAt("ReviewTweetTask");  // sucesss just if process ended
 
     List<Task> taskList = taskService()
