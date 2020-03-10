@@ -82,7 +82,9 @@ public class ProcessJUnitTest {
             .startAfterActivity("ReviewTweetTask")
             .execute();
 
-    assertThat(processInstance).isEnded().hasPassed("TweetDeclinedEndEvent");
+    assertThat(processInstance).isWaitingAt("NotifyUserOfRejectionTask").externalTask().hasTopicName("notification");
+    complete(externalTask());
 
+    assertThat(processInstance).isEnded().hasPassed("TweetDeclinedEndEvent");
   }
 }

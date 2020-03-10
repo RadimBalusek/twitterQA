@@ -33,7 +33,7 @@
     <bpmn:sequenceFlow id="YesSequenceFlow" name="Yes" sourceRef="ApprovedGateway" targetRef="PublishTweetTask">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approved}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:userTask id="ReviewTweetTask" name="Review tweet" camunda:formKey="embedded:app:forms/reviewTweet.html" camunda:candidateGroups="management">
+    <bpmn:userTask id="ReviewTweetTask" name="Review tweet" camunda:asyncBefore="true" camunda:formKey="embedded:app:forms/reviewTweet.html" camunda:candidateGroups="management">
       <bpmn:extensionElements>
         <camunda:properties>
           <camunda:property />
@@ -45,10 +45,10 @@
       <bpmn:incoming>Flow_1v5242d</bpmn:incoming>
       <bpmn:outgoing>Flow_1yxsqj5</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:task id="NotifyUserOfRejectionTask" name="Notify user of rejection">
+    <bpmn:serviceTask id="NotifyUserOfRejectionTask" name="Notify user of rejection" camunda:type="external" camunda:topic="notification">
       <bpmn:incoming>NoSequenceFlow</bpmn:incoming>
       <bpmn:outgoing>Flow_0zgd3kk</bpmn:outgoing>
-    </bpmn:task>
+    </bpmn:serviceTask>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="TwitterQAProcess">
@@ -113,7 +113,7 @@
       <bpmndi:BPMNShape id="Activity_0ccuun3_di" bpmnElement="ReviewTweetTask">
         <dc:Bounds x="310" y="80" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0ong3l5_di" bpmnElement="NotifyUserOfRejectionTask">
+      <bpmndi:BPMNShape id="Activity_117rtj3_di" bpmnElement="NotifyUserOfRejectionTask">
         <dc:Bounds x="780" y="230" width="100" height="80" />
       </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
