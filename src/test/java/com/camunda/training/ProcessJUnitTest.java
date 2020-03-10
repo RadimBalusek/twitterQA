@@ -66,4 +66,23 @@ public class ProcessJUnitTest {
     Assertions.assertThat(taskList).hasSize(1);
 
   }
+
+  @Test
+  @Deployment(resources = "diagram_1_ManualTask.bpmn")
+  public void testTweetRejected() {
+
+    Map<String, Object> varMap = new HashMap<String, Object>();
+    varMap.put("approved", false);
+    varMap.put("content", "This is my exercise 8 JUnit tweet!! "
+            + System.currentTimeMillis());
+
+    ProcessInstance processInstance = runtimeService()
+            .createProcessInstanceByKey("TwitterQAProcess")
+            .setVariables(varMap)
+            .startAfterActivity("ReviewTweetTask")
+            .execute();
+
+    assertThat(processInstance).isEnded().hasPassed("TweetDeclinedEndEvent");
+
+  }
 }
